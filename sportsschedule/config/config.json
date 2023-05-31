@@ -1,0 +1,21 @@
+{
+    "development": {
+      "username": "postgres",
+      "password": "deepakjha1",
+      "database": "sports_schedular_dev",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+    },
+    "test": {
+      "username": "postgres",
+      "password": "deepakjha1",
+      "database": "sports_schedulartest",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+    },
+    "production": {
+      "use_env_variable" : "database_URL",
+      "dialect": "postgres"
+    }
+  }
+  
