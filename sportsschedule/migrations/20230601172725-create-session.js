@@ -67,4 +67,3 @@ module.exports = {
     await queryInterface.dropTable('Sessions');
   },
 };
-
