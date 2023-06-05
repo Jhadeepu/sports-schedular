@@ -1,5 +1,5 @@
 {
-  "name": "Sports-schedular",
+  "name": "Sportsschedular",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "start": "nodemon -e js,ejs",
     "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
     "test": "NODE_ENV=test jest --detectOpenHandles",
-    "prepare": "cd .. && husky install sports-schedular/.husky"
+    "prepare": "cd .. && husky install sportsschedular/.husky"
   },
   "author": "Deepakjha <djha74355@gmail.com>",
   "license": "ISC",
