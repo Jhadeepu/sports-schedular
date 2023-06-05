@@ -46,6 +46,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -63,3 +67,4 @@ module.exports = {
     await queryInterface.dropTable('Sessions');
   },
 };
+
