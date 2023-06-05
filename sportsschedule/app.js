@@ -300,22 +300,26 @@ app.post("/sport/:sportId/sessions/create", connectEnsureLogin.ensureLoggedIn("/
 });
 
 
-//     I am commented out some code and I will continue from the below code will be for session edit or delete 
+
+
 
 app.get("/sport/:sportId/sessions/:sessionId/edit", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
   const sportId = req.params.sportId;
   const sessionId = req.params.sessionId;
+
   try {
     const sport = await Sport.findByPk(sportId);
     if (!sport) {
       req.flash("error", "Sport not found.");
       return res.redirect("/sports");
     }
-    const session = await Session.findByPk(sessionId, { include: User }); // Include the User model to fetch associated users
+
+    const session = await Session.findByPk(sessionId, { include: User }); 
     if (!session) {
       req.flash("error", "Session not found.");
       return res.redirect(`/sport/${sportId}`);
     }
+
     res.render('edit-session', {
       title: 'Edit Session',
       sport: sport, 
@@ -330,6 +334,7 @@ app.get("/sport/:sportId/sessions/:sessionId/edit", connectEnsureLogin.ensureLog
   }
 });
 
+
 app.post("/sport/:sportId/sessions/:sessionId/edit", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
   const sportId = req.params.sportId;
   const sessionId = req.params.sessionId;
@@ -339,18 +344,21 @@ app.post("/sport/:sportId/sessions/:sessionId/edit", connectEnsureLogin.ensureLo
     sessionParticipants,
     playersNeeded
   } = req.body;
+
   try {
     const session = await Session.findByPk(sessionId);
     if (!session) {
       req.flash("error", "Session not found.");
       return res.redirect(`/sport/${sportId}`);
     }
+
     await session.update({
       sessionDateTime,
       sessionVenue,
       sessionParticipants,
       playersNeeded
     });
+
     req.flash("success", "Session updated successfully!");
     res.redirect(`/sport/${sportId}`);
   } catch (error) {
@@ -363,13 +371,16 @@ app.post("/sport/:sportId/sessions/:sessionId/edit", connectEnsureLogin.ensureLo
 app.post("/sport/:sportId/sessions/:sessionId/delete", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
   const sportId = req.params.sportId;
   const sessionId = req.params.sessionId;
+
   try {
     const session = await Session.findByPk(sessionId);
     if (!session) {
       req.flash("error", "Session not found.");
       return res.redirect(`/sport/${sportId}`);
     }
+
     await session.destroy();
+
     req.flash("success", "Session deleted successfully!");
     res.redirect(`/sport/${sportId}`);
   } catch (error) {
