@@ -1,31 +1,34 @@
 /* eslint-disable no-unused-vars */
-const connectEnsureLogin = require("connect-ensure-login");
-const { Sport, User, Session } = require("./models");
 const express = require("express");
 const csrf = require("tiny-csrf");
 const app = express();
-const flash = require("connect-flash");
+const { Sport, User, Session } = require("./models");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const path = require(`path`);
+const path = require("path");
 
 const { ensureLoggedIn, ensureLoggedOut } = require("connect-ensure-login");
 const Sequelize = require("sequelize");
 
 const passport = require("passport");
+const connectEnsureLogin = require("connect-ensure-login");
 const session = require("express-session");
-const LocalStrategy = require('passport-local');
+const LocalStrategy = require("passport-local");
 const bcrypt = require("bcrypt");
+const flash = require("connect-flash");
 const { error } = require("console");
 
-const saltRounds = 10 ;
+const saltRounds = 10;
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("shh! some secret string"));
-app.use(csrf("this_should_be_32_character_long",["POST", "PUT", "DELETE"]));
+app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
+app.use(flash());
+app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, "public")));
+app.set("views", path.join(__dirname, "views"));
 
-// Move the session middleware above the flash middleware
 app.use(
   session({
     secret: "secret-key-23456897686543",
@@ -36,11 +39,8 @@ app.use(
     saveUninitialized: true,
   })
 );
-
-app.use(flash());
-app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname, 'public')));
-app.set("views", path.join(__dirname, "views"));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 app.use(function (request, response, next) {
@@ -65,9 +65,8 @@ passport.use(
           }
         })
         .catch(() => {
-          return done(null, false, { message: "User not found" 
+          return done(null, false, { message: "User not found" });
         });
-      });
     }
   )
 );
@@ -89,6 +88,7 @@ passport.deserializeUser((id, done) => {
 
 app.get("/", async (request, response) => {
   const csrfToken = request.csrfToken();
+
   if (request.user) {
     return response.redirect("/sports");
   } else {
@@ -103,17 +103,12 @@ app.get("/login", (request, response) => {
   if (request.isAuthenticated()) {
     return response.redirect("/sports");
   }
+
   response.render("login", {
     title: "Login",
     csrfToken: request.csrfToken(),
   });
 });
-
-app.post("/login", passport.authenticate("local", {
-  successRedirect: "/sports",
-  failureRedirect: "/login",
-  failureFlash: true,
-}));
 
 app.get("/signup", (request, response) => {
   response.render("signup", {
@@ -124,6 +119,7 @@ app.get("/signup", (request, response) => {
 
 app.post("/user", async (request, response) => {
   const { firstName, lastName, email, password, isAdmin } = request.body;
+
   if (firstName.length === 0) {
     request.flash("error", "First Name cannot be empty!");
     return response.redirect("/signup");
@@ -132,14 +128,17 @@ app.post("/user", async (request, response) => {
     request.flash("error", "Last Name cannot be empty!");
     return response.redirect("/signup");
   }
+
   if (email.length === 0) {
     request.flash("error", "Email cannot be empty!");
     return response.redirect("/signup");
   }
+
   if (password.length === 0) {
     request.flash("error", "Password cannot be empty!");
     return response.redirect("/signup");
   }
+
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const user = await User.create({
@@ -149,18 +148,25 @@ app.post("/user", async (request, response) => {
       password: hashedPassword,
       isAdmin: isAdmin || false,
     });
+
     request.login(user, (error) => {
       if (error) {
         console.log(error);   
       }
       response.redirect("/sports");
     })
-  }catch (error) {
+  } catch (error) {
     console.log(error);
     request.flash("error", "An error occurred. Please try again.");
     response.redirect("/signup");
   }
 });
+
+app.post("/login", passport.authenticate("local", {
+  successRedirect: "/sports",
+  failureRedirect: "/login",
+  failureFlash: true,
+}));
 
 app.get("/sports", connectEnsureLogin.ensureLoggedIn("/login"), async (request, response) => {
   try {
@@ -189,10 +195,12 @@ app.get("/sport", connectEnsureLogin.ensureLoggedIn(), async (request, response)
 app.post("/sport", connectEnsureLogin.ensureLoggedIn("/sports"), async (request, response) => {
   const { name } = request.body;
   const createdBy = request.user.id; 
+
   if (name.length === 0) {
     request.flash("error", "Name cannot be empty!");
     return response.redirect("/sports");
   }
+
   try {
     await Sport.create({
       name,
@@ -209,14 +217,17 @@ app.post("/sport", connectEnsureLogin.ensureLoggedIn("/sports"), async (request,
 
 app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (request, response) => {
   const sportId = request.params.sportId;
+
   try {
     const sport = await Sport.findByPk(sportId);
     if (!sport) {
       request.flash("error", "Sport not found.");
       return response.redirect("/sports");
     }
+
     const sessions = await Session.findAll({ where: { sportId } });
-    const createdSession = null; 
+    const createdSession = null;
+
     response.render("sport-page", {
       title: sport.name,
       sportId: sportId,
@@ -224,6 +235,7 @@ app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (
       sessions,
       createdSession,
       csrfToken: request.csrfToken(),
+      
     });
   } catch (error) {
     console.log(error);
@@ -231,15 +243,16 @@ app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (
     response.redirect("/sports");
   }
 });
-
 app.get("/sport/:sportId/session/create", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
   const sportId = req.params.sportId;
+
   try {
     const sport = await Sport.findByPk(sportId);
     if (!sport) {
       req.flash("error", "Sport not found.");
       return res.redirect("/sports");
     }
+
     res.render("create-session", {
       title: "Create a New Sport Session",
       sportId: sport.id,
@@ -254,32 +267,31 @@ app.get("/sport/:sportId/session/create", connectEnsureLogin.ensureLoggedIn("/lo
 
 app.post("/sport/:sportId/sessions/create", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
   const sportId = req.params.sportId;
-  const { sessionDateTime, sessionVenue, sessionParticipants, playersNeeded } = req.body;
+  const {
+    sessionDateTime,
+    sessionVenue,
+    sessionParticipants,
+    playersNeeded
+  } = req.body;
+
   try {
     const sport = await Sport.findByPk(sportId);
     if (!sport) {
       req.flash("error", "Sport not found.");
       return res.redirect("/sports");
     }
-    const createdBy = req.user.id;
+    const createdBy = req.user.id; 
+
     await Session.create({
       sportId,
       sessionDateTime,
       sessionVenue,
       sessionParticipants,
       playersNeeded,
-      createdBy,
+      createdBy, 
     });
-    const sessions = await Session.findAll({ where: { sportId } });
     req.flash("success", "Session created successfully!");
-    res.render("sport-page", {
-      title: sport.name,
-      sportId: sportId,
-      sport: sport,
-      sessions,
-      createdSession: null,
-      csrfToken: req.csrfToken(),
-    });
+    res.redirect(`/sport/${sportId}`);
   } catch (error) {
     console.log(error);
     req.flash("error", "An error occurred. Please try again.");
