@@ -1,40 +1,31 @@
 /* eslint-disable no-unused-vars */
 const connectEnsureLogin = require("connect-ensure-login");
 const { Sport, User, Session } = require("./models");
-const LocalStrategy = require("passport-local");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const bodyParser = require("body-parser");
-const Sequelize = require("sequelize");
-const flash = require("connect-flash");
-const { error } = require("console");
-const passport = require("passport");
 const express = require("express");
 const csrf = require("tiny-csrf");
-const bcrypt = require("bcrypt");
-const path = require("path");
 const app = express();
-const saltRounds = 10;
+const flash = require("connect-flash");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const path = require(`path`);
 
-//==================================================
-//============ MIDDLEWARE ==========================
+const { ensureLoggedIn, ensureLoggedOut } = require("connect-ensure-login");
+const Sequelize = require("sequelize");
 
-app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
-app.use(express.static(path.join(__dirname, "public")));
+const passport = require("passport");
+const session = require("express-session");
+const LocalStrategy = require('passport-local');
+const bcrypt = require("bcrypt");
+const { error } = require("console");
+
+const saltRounds = 10 ;
+
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("shh! some secret string"));
-app.set("views", path.join(__dirname, "views"));
-app.use(passport.initialize());
-app.set("view engine", "ejs");
-app.use(passport.session());
-app.use(bodyParser.json());
-app.use(flash());
+app.use(csrf("this_should_be_32_character_long",["POST", "PUT", "DELETE"]));
 
-app.use(function (request, response, next) {
-  response.locals.messages = request.flash();
-  next();
-});
-
+// Move the session middleware above the flash middleware
 app.use(
   session({
     secret: "secret-key-23456897686543",
@@ -45,6 +36,17 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+app.use(flash());
+app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, 'public')));
+app.set("views", path.join(__dirname, "views"));
+
+
+app.use(function (request, response, next) {
+  response.locals.messages = request.flash();
+  next();
+});
 
 passport.use(
   new LocalStrategy(
@@ -71,8 +73,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  console.log(
-  "Serializing user in session", user.id);
+  console.log("Serializing user in session", user.id);
   done(null, user.id);
 });
 
