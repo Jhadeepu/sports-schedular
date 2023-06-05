@@ -1,33 +1,28 @@
 /* eslint-disable no-unused-vars */
 'use strict';
-const { Model } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   class Sport extends Model {
     static associate(models) {
       // define association here
     }
-
-    static async getSports(userId) {
-      try {
-        const sports = await Sport.findAll({ where: { createdBy: userId } });
-        return sports;
-      } catch (error) {
-        throw new Error('Failed to fetch sports');
-      }
-    }
   }
-
   Sport.init(
     {
-      name: DataTypes.STRING,
-      createdBy: DataTypes.STRING
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      createdBy: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      }
     },
     {
       sequelize,
       modelName: 'Sport',
     }
   );
-
   return Sport;
 };
