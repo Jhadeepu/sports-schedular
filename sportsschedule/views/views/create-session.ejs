@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-image: linear-gradient(to bottom right, #FFC3A0, #FFAFBD);
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 400px;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 5px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #374151;
+        font-weight: bold;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        color: #374151;
+      }
+      .form-group input[type="datetime-local"] {
+        appearance: none;
+        padding: 8px;
+      }
+      .form-group button[type="submit"] {
+        padding: 8px 12px;
+        background-color: #10b981;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .form-group button[type="submit"]:hover {
+        background-color: #059669;
+      }
+      h2 {
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .notifications {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 14px;
+        color: #888888;
+      }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Create a New Sport Session</h2>
+    <form action="/sport/:sportId/sessions/create" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="form-group">
+        <label for="dateTime">When will this sport session be held?</label>
+        <input type="datetime-local" id="dateTime" name="sessionDateTime" required>
+      </div>
+      <div class="form-group">
+        <label for="venue">Where will this session be played?</label>
+        <input type="text" id="venue" name="sessionVenue" required>
+      </div>
+      <div class="form-group">
+        <label for="participants">Who all will be joining you in this session? (comma-separated)</label>
+        <input type="text" id="participants" name="sessionParticipants" required>
+      </div>
+      <div class="form-group">
+        <label for="playersNeeded">How many more players do you need?</label>
+        <input type="text" id="playersNeeded" name="playersNeeded" required>
+      </div>
+      <div class="form-group">
+        <button type="submit">Create Session</button>
+      </div>
+    </form>
+      <%- include("Flash.ejs") %>
+    </div>
+  </div>
+</body>
+</html>
