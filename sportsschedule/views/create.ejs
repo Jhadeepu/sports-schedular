@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./css/styles.css" rel="stylesheet">
+    <title><%= title %></title>
+</head>
+<body class="bg-green-100">
+    <div class="grid grid-cols-4">
+        <div class="col-start-2 col-span-2">
+            <h2 class="text-2xl font-semibold mt-8">Create a new sport</h2>
+
+            <form action="/sport" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                        Name
+                    </label>
+                    <input id="name" name="name" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Sport</button>
+            </form>
+            <%- include("Flash.ejs") %>
+        </div>
+    </div>
+</body>
+</html>
