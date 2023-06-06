@@ -15,17 +15,17 @@
                 <a href="/sports" class="hover:underline">Sports</a> / <%= sport.name %>
             </p>
             <div>
-                <a href="/sport/<%= sport.id %>/session/create" class="hover:underline">Create a new session</a>
+                <a href="/sports/<%= sportId %>/session/create" class="hover:underline">Create a new session</a>
             </div>
             <div>
-                <a href="/sport/<%= sport.id %>/sessions" class="hover:underline">View previous sessions</a>
+                <a href="/sports/<%= sportId %>/sessions" class="hover:underline">View previous sessions</a>
             </div>
             <% if (sessions.length > 0) { %>
                 <h2>List of Sessions:</h2>
                 <div>
                     <% sessions.forEach(function(session) { %>
                         <div>
-                            <a href="/sport/<%= sport.id %>/sessions/<%= session.id %>" class="hover:underline"><%= session.sessionDateTime %></a>  
+                            <a href="/sports/<%= sportId %>/sessions/<%= session.id %>" class="hover:underline"><%= session.sessionDateTime %></a>  
                         </div>
                     <% }); %>
                 </div>
@@ -33,4 +33,4 @@
         </div>
     </div>
 </body>
-
+</html>
