@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  Sessions.init({
+  Session.init({
     date: DataTypes.DATE,
     address: DataTypes.STRING,
     player: DataTypes.STRING,
