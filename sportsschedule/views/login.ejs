@@ -7,7 +7,6 @@
         <meta name="csrf-token" content="<%= csrfToken %>">
         <title>
             <%= title %>
-            <a href="/" class="text-blue-500 hover:underline">My Sports Scheduling</a>
         </title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="./css/styles.css" rel="stylesheet" />
@@ -31,8 +30,9 @@
                         <button type="submit" class="text-white bg-green-600 hover:bg-green-800 font-medium rounded px-5 py-2">Sign in</button> 
                     </div>
                 </form>
+                <p class="py-2">Don't have an account? <a href="/signup" class="text-blue-500 hover:underline">Sign up</a></p>
                 <%- include("Flash.ejs") %>
             </div>
         </div>
     </body>
-</html> 
+</html>
