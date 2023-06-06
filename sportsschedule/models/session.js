@@ -12,11 +12,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-    sessions.belongsTo(models.Sport, {
-      foreignKey: "sportId",
-       as: 'sport',
-});
-
+      sessions.belongsTo(models.Sport, {
+        foreignKey: "sportId",
+      });
+    }
   }
   sessions.init({
     date: DataTypes.DATE,
