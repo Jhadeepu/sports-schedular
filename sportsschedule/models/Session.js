@@ -4,7 +4,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Session extends Model {
+  class sessions extends Model {
     /**
      * 
      * Helper method for defining associations.
@@ -12,12 +12,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Session.belongsTo(models.Sport, {
+      sessions.belongsTo(models.Sport, {
         foreignKey: "sportId",
       });
     }
   }
-  Session.init({
+  sessions.init({
     date: DataTypes.DATE,
     address: DataTypes.STRING,
     player: DataTypes.STRING,
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     organizer: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Session',
+    modelName: 'sessions',
   });
-  return Session;
+  return sessions;
 };
