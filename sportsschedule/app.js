@@ -214,29 +214,26 @@ app.post("/sport", connectEnsureLogin.ensureLoggedIn("/sports"), async (request,
     response.redirect("/sports");
   }
 });
-
 app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (request, response) => {
-  const sportId = request.params.sportId;
+const sportId = request.params.sportId;
 
-  try {
-    const sport = await Sport.findByPk(sportId);
-    if (!sport) {
-      request.flash("error", "Sport not found.");
-      return response.redirect("/sports");
-    }
+try {
+const sport = await Sport.findByPk(sportId);
+if (!sport) {
+request.flash("error", "Sport not found.");
+return response.redirect("/sports");
+}
+const sessions = await Session.findAll({ where: { sportId } });
+const createdSession = null;
 
-    const sessions = await Session.findAll({ where: { sportId } });
-    const createdSession = null;
-
-    response.render("sport-page", {
-      title: sport.name,
-      sportId: sportId,
-      sport: sport,
-      sessions,
-      createdSession,
-      csrfToken: request.csrfToken(),
-      
-    });
+response.render("sport-page", {
+  title: sport.name,
+  sportId: sportId,
+  sport: sport,
+  sessions,
+  createdSession,
+  csrfToken: request.csrfToken(),
+});
   } catch (error) {
     console.log(error);
     request.flash("error", "An error occurred. Please try again.");
