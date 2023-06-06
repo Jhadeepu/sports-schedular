@@ -3,11 +3,12 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-class Sport extends Model {
-  static associate(models) {
-    Sport.hasMany(models.Session, { foreignKey: 'sportId' });
+  class Sport extends Model {
+    static associate(models) {
+      Sport.hasMany(models.sessions, { foreignKey: 'sportId' });
+    }
   }
-}
+  
   Sport.init(
     {
       name: {
@@ -24,5 +25,6 @@ class Sport extends Model {
       modelName: 'Sport',
     }
   );
+
   return Sport;
 };
