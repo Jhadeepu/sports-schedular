@@ -223,7 +223,7 @@ if (!sport) {
 request.flash("error", "Sport not found.");
 return response.redirect("/sports");
 }
-const sessions = await Session.findAll({ where: { sportId } });
+const sessions = await sessions.findAll({ where: { sportId } });
 const createdSession = null;
 
 response.render("sport-page", {
