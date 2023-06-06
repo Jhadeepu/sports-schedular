@@ -3,11 +3,11 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  class Sport extends Model {
-    static associate(models) {
-      // define association here
-    }
+class Sport extends Model {
+  static associate(models) {
+    Sport.hasMany(models.Session, { foreignKey: 'sportId' });
   }
+}
   Sport.init(
     {
       name: {
