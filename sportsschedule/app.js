@@ -2,7 +2,7 @@
 const express = require("express");
 const csrf = require("tiny-csrf");
 const app = express();
-const { Sport, User, Sessions } = require("./models");
+const { sport, user, sessions } = require("./models");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
