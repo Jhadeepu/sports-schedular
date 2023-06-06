@@ -4,7 +4,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class sessions extends Model {
+  class Session extends Model {
     /**
      * 
      * Helper method for defining associations.
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     organizer: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'sessions',
+    modelName: 'Session',
   });
-  return sessions;
+  return Session;
 };
