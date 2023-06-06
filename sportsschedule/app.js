@@ -223,7 +223,7 @@ app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (
       request.flash("error", "Sport not found.");
       return response.redirect("/sports");
     }
-    const sessions = await sessions.findAll({ where: { sportId } });
+    const foundsessions = await sessions.findAll({ where: { sportId } });
     const createdSession = null;
 
     response.render("sport-page", {
