@@ -10,10 +10,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING, 
-        allowNull: false
-      },
       date: {
         type: Sequelize.DATE
       },
@@ -38,16 +34,7 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-    await queryInterface.addConstraint("Sessions", {
-      fields: ["sportId"],
-      type: "foreign key",
-      references: {
-        table: "Sports",
-        field: "id",
-      },
-    });
   },
-  
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('sessions');
   }
