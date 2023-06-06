@@ -344,7 +344,7 @@ app.post("/sport/:sportId/sessions/create", connectEnsureLogin.ensureLoggedIn("/
 //   } = req.body;
 
 //   try {
-//     const session = await Session.findByPk(sessionId);
+//     const session = await sessions.findByPk(sessionId);
 //     if (!session) {
 //       req.flash("error", "Session not found.");
 //       return res.redirect(`/sport/${sportId}`);
@@ -371,7 +371,7 @@ app.post("/sport/:sportId/sessions/create", connectEnsureLogin.ensureLoggedIn("/
 //   const sessionId = req.params.sessionId;
 
 //   try {
-//     const session = await Session.findByPk(sessionId);
+//     const session = await sessions.findByPk(sessionId);
 //     if (!session) {
 //       req.flash("error", "Session not found.");
 //       return res.redirect(`/sport/${sportId}`);
