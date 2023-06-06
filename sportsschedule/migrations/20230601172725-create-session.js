@@ -1,69 +1,50 @@
 /* eslint-disable no-unused-vars */
 'use strict';
-
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Sessions', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('sessions', {
       id: {
-        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-      },
-      sportId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      venue: {
-        type: Sequelize.STRING,
-        allowNull: false,
+        type: Sequelize.INTEGER
       },
       date: {
-        type: Sequelize.DATE,
-        allowNull: false,
+        type: Sequelize.DATE
       },
-      time: {
-        type: Sequelize.TIME,
-        allowNull: false,
+      address: {
+        type: Sequelize.STRING
       },
-      duration: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+      player: {
+        type: Sequelize.STRING
       },
-      playersNeeded: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+      total: {
+        type: Sequelize.STRING
       },
-      teamA: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      teamB: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      category: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
+      organizer: {
+        type: Sequelize.STRING
       },
       createdAt: {
-        type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        type: Sequelize.DATE
       },
       updatedAt: {
-        type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        type: Sequelize.DATE
+      }
+    });
+    await queryInterface.addConstraint("Sessions", {
+      fields: ["sportId"],
+      type: "foreign key",
+      references: {
+        table: "Sports",
+        field: "id",
       },
     });
   },
-
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Sessions');
-  },
+  
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('sessions');
+  }
 };
