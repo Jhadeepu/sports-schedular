@@ -2,7 +2,7 @@
 const express = require("express");
 const csrf = require("tiny-csrf");
 const app = express();
-const { Sport, User, Session } = require("./models");
+const { Sport, User, sessions } = require("./models");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
@@ -223,7 +223,7 @@ app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (
       request.flash("error", "Sport not found.");
       return response.redirect("/sports");
     }
-    const sessions = await Session.findAll({ where: { sportId } });
+    const sessions = await sessions.findAll({ where: { sportId } });
     const createdSession = null;
 
     response.render("sport-page", {
@@ -280,7 +280,7 @@ app.post("/sport/:sportId/sessions/create", connectEnsureLogin.ensureLoggedIn("/
     }
     const createdBy = req.user.id; 
 
-    await Session.create({
+    await sessions.create({
       sportId,
       sessionDateTime,
       sessionVenue,
@@ -296,95 +296,4 @@ app.post("/sport/:sportId/sessions/create", connectEnsureLogin.ensureLoggedIn("/
     res.redirect(`/sport/${sportId}`);
   }
 });
-
-
-
-
-
-// app.get("/sport/:sportId/sessions/:sessionId/edit", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
-//   const sportId = req.params.sportId;
-//   const sessionId = req.params.sessionId;
-
-//   try {
-//     const sport = await Sport.findByPk(sportId);
-//     if (!sport) {
-//       req.flash("error", "Sport not found.");
-//       return res.redirect("/sports");
-//     }
-
-//     const session = await sessions.findByPk(sessionId, { include: User }); 
-//     if (!session) {
-//       req.flash("error", "Session not found.");
-//       return res.redirect(`/sport/${sportId}`);
-//     }
-
-//     res.render('edit-session', {
-//       title: 'Edit Session',
-//       sport: sport, 
-//       sportId: req.params.sportId,
-//       session: session,
-//       csrfToken: req.csrfToken()
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     req.flash("error", "An error occurred. Please try again.");
-//     res.redirect(`/sport/${sportId}`);
-//   }
-// });
-
-
-// app.post("/sport/:sportId/sessions/:sessionId/edit", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
-//   const sportId = req.params.sportId;
-//   const sessionId = req.params.sessionId;
-//   const {
-//     sessionDateTime,
-//     sessionVenue,
-//     sessionParticipants,
-//     playersNeeded
-//   } = req.body;
-
-//   try {
-//     const session = await sessions.findByPk(sessionId);
-//     if (!session) {
-//       req.flash("error", "Session not found.");
-//       return res.redirect(`/sport/${sportId}`);
-//     }
-
-//     await session.update({
-//       sessionDateTime,
-//       sessionVenue,
-//       sessionParticipants,
-//       playersNeeded
-//     });
-
-//     req.flash("success", "Session updated successfully!");
-//     res.redirect(`/sport/${sportId}`);
-//   } catch (error) {
-//     console.log(error);
-//     req.flash("error", "An error occurred. Please try again.");
-//     res.redirect(`/sport/${sportId}`);
-//   }
-// });
-
-// app.post("/sport/:sportId/sessions/:sessionId/delete", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
-//   const sportId = req.params.sportId;
-//   const sessionId = req.params.sessionId;
-
-//   try {
-//     const session = await sessions.findByPk(sessionId);
-//     if (!session) {
-//       req.flash("error", "Session not found.");
-//       return res.redirect(`/sport/${sportId}`);
-//     }
-
-//     await session.destroy();
-
-//     req.flash("success", "Session deleted successfully!");
-//     res.redirect(`/sport/${sportId}`);
-//   } catch (error) {
-//     console.log(error);
-//     req.flash("error", "An error occurred. Please try again.");
-//     res.redirect(`/sport/${sportId}`);
-//   }
-// });
 module.exports = app;
