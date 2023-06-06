@@ -2,7 +2,7 @@
 const express = require("express");
 const csrf = require("tiny-csrf");
 const app = express();
-const { Sport, User, sessions } = require("./models");
+const { Sport, User, Session } = require("./models");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
@@ -223,7 +223,7 @@ app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (
       request.flash("error", "Sport not found.");
       return response.redirect("/sports");
     }
-    const sessions = await sessions.findAll({ where: { sportId } });
+    const sessions = await Session.findAll({ where: { sportId } });
     const createdSession = null;
 
     response.render("sport-page", {
@@ -280,7 +280,7 @@ app.post("/sport/:sportId/sessions/create", connectEnsureLogin.ensureLoggedIn("/
     }
     const createdBy = req.user.id; 
 
-    await sessions.create({
+    await Session.create({
       sportId,
       sessionDateTime,
       sessionVenue,
