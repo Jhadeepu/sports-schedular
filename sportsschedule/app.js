@@ -214,6 +214,7 @@ app.post("/sport", connectEnsureLogin.ensureLoggedIn("/sports"), async (request,
     response.redirect("/sports");
   }
 });
+
 app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (request, response) => {
   const sportId = request.params.sportId;
 
@@ -223,14 +224,14 @@ app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (
       request.flash("error", "Sport not found.");
       return response.redirect("/sports");
     }
-    const foundsessions = await sessions.findAll({ where: { sportId } });
+
     const createdSession = null;
 
     response.render("sport-page", {
       title: sport.name,
       sportId: sportId,
       sport: sport,
-      sessions,
+      session,
       createdSession,
       csrfToken: request.csrfToken(),
     });
