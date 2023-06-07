@@ -254,6 +254,7 @@ app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (
       request.flash("error", "Sport not found.");
       return response.redirect("/sports");
     }
+    const account = request.user.userType
     const createdSession = null;
     response.render("sport-page", {
       title: sport.name,
@@ -262,6 +263,7 @@ app.get("/sports/:sportId", connectEnsureLogin.ensureLoggedIn("/login"), async (
       session,
       createdSession,
       csrfToken: request.csrfToken(),
+       isAdmin:account,
     });
   } catch (error) {
     console.log(error);
