@@ -20,14 +20,14 @@
             <div>
                 <a href="/sport/<%= sport.id %>/sessions" class="hover:underline">View previous sessions</a>
             </div>
-                <h2>List of Sessions:</h2>
-                <div>
-                        <div>
-                            <a href="/sport/<%= sport.id %>/sessions/<%= session.id %>" class="hover:underline"><%= session.sessionDateTime %></a>  
-                        </div>      
-                </div>
-            
+            <div>
+                <a href="/sport/<%= sport.id %>/edit" class="hover:underline">Edit Sport</a>
+            </div>
+            <h2>List of Sessions:</h2>
+                    <div>
+                        <a href="/sport/<%= sport.id %>/sessions/<%= session.id %>" class="hover:underline"><%= session.sessionDateTime %></a>  
+                    </div>
         </div>
     </div>
 </body>
-
+</html>
