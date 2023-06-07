@@ -369,7 +369,7 @@ app.post("/sport/:sportId/edit", connectEnsureLogin.ensureLoggedIn("/login"), as
   }
 });
 
-app.get("/sport/:sportId/delete", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
+app.get("/sport/:id/delete", connectEnsureLogin.ensureLoggedIn("/login"), async (req, res) => {
   if (req.user.userType == 'admin') {
   try {
     await Sport.DeleteSport(req.params.id);
