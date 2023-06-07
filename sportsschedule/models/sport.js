@@ -7,6 +7,13 @@ module.exports = (sequelize) => {
     static associate(models) {
       // define association here
     }
+    static DeleteSport(id) {
+      return this.destroy({
+        where: {
+          id:id
+        }
+      })
+    }
   }
   Sport.init(
     {
