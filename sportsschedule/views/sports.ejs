@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,29 +13,28 @@
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
             <p class="text-xl flex items-center">
-                Welcome, Administrator page 
-                <div>
-                    <a href="/sport" class="hover:underline">Create a new Sport</a>
-                </div>
-                <div>
-                    <a href="" class="hover:underline">View Reports</a>
-                </div>
-                <div>
-                    <a href="/signout" class="hover:underline">Signout</a>
-                </div>
+                <% if (isAdmin === "admin") { %>
+                    Welcome, Administrator page 
+                    <div>
+                        <a href="/sport" class="hover:underline">Create a new Sport</a>
+                    </div>
+                    <div>
+                        <a href="" class="hover:underline">View Reports</a>
+                    </div>
+                 
+                <% } %>
             </p>
-            <% if (sports.length > 0) { %>
-                <h2> session available for scheduling a sports</h2>
-                <div>
-                    <% sports.forEach(function(sport) { %>
-                        <div>
-                            <a href="/sports/<%= sport.id %>" class="<%= sport.name %> hover:underline"><%= sport.name %></a>
-                        </div>
-                    <% }); %>
-                </div>
-            <% } else { %>
-                <p>No sports available.</p>
-            <% } %>
+            <h2> session available for scheduling a sports</h2>
+            <div>
+                <% sports.forEach(function(sport) { %>
+                    <div>
+                        <a href="/sports/<%= sport.id %>" class="<%= sport.name %> hover:underline"><%= sport.name %></a>
+                    </div>
+                <% }); %>
+            </div>
+            <div class="flex justify-end ">
+                <a href="/signout" class="text-blue-500 hover:underline">Signout</a>
+            </div>
         </div>
     </div>
 </body>
