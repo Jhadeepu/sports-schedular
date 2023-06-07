@@ -11,12 +11,14 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       date: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       address: {
         type: Sequelize.STRING
       },
       player: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       total: {
