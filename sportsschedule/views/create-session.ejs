@@ -75,7 +75,7 @@
 <body>
   <div class="container">
     <h2>Create a New Sport Session</h2>
-    <form action="/sport/:sportId/sessions/create" method="POST">
+    <form action="/sports/:sportId" method="POST">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <div class="form-group">
         <label for="dateTime">When will this sport session be held?</label>
